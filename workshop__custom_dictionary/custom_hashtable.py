@@ -1,3 +1,6 @@
+from copy import deepcopy
+
+
 class HashTable:
     def __init__(self):
         self.__keys = [None, None, None, None]
@@ -53,6 +56,35 @@ class HashTable:
         except ValueError:
             return return_default_value
 
+    def sort(self):
+        copy_keys = [el for el in self.__keys if el is not None]
+        copy_values = [el for el in self.__values if el is not None]
+
+        result = list(zip(copy_keys, copy_values))
+        sorted_result = sorted(result, key=lambda t: t[0])
+        table = HashTable()
+        table._HashTable__keys = [t[0] for t in sorted_result]
+        table._HashTable__values = [t[1] for t in sorted_result]
+        table._HashTable__length = self.__length
+        diff = self.__length - self.count
+        table._HashTable__keys = table._HashTable__keys + [None] * diff
+        table._HashTable__values = table._HashTable__values + [None] * diff
+
+        return table
+
+    def sort_by_values_ascending(self):
+        # TODO at home
+        pass
+
+    def sort_by_keys_descending(self):
+        # TODO at home
+        pass
+
+    def sort_by_values_descending(self):
+        # TODO at home
+        pass
+
+
     def add(self, key, value):
         self.__setitem__(key, value)
 
@@ -65,6 +97,10 @@ class HashTable:
         return "{ " + ", ".join(result) + " }"
 
 
+
+
+
+
 table = HashTable()
 
 table["name"] = "Peter"
@@ -75,12 +111,25 @@ table["street"] = "Markovo Tepe"
 table["name"] = "Test"
 
 print(table)
-print(table.get("name"))
-print(table.get("asd", "Me"))
-table.add("number", "8")
+sorted_table = table.sort()
+
+print(type(table))
+print(type(sorted_table))
+# print(table.get("name"))
+# print(table.get("asd", "Me"))
+# table.add("number", "8")
+
+
+# TODO implement .sort() for sorting
+
+
+
 
 print(table["age"])
 # print(table["asd"])
 
 print(len(table))
 print(table.count)
+sorted_table.add("new_key", 8)
+print(sorted_table)
+
