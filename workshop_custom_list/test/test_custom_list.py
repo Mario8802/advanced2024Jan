@@ -221,21 +221,286 @@ class TestCustomList(TestCase):
 
         self.assertEqual(self.l._CustomList__values, [])
 
+    def test_index_value_does_exist(self):
+        self.l._CustomList__values = [100, 1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [100, 1, 2, 100])
+
+        with self.assertRaises(ValueError) as ex:
+            self.l.index(3)
+        self.assertEqual(str(ex.exception.args[0]), "Value is not in the list")
+
+    def test_index_returns_first_occurrence_of_the_value(self):
+        self.l._CustomList__values = [100, 1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [100, 1, 2, 100])
+
+        result = self.l.index(100)
+
+        self.assertEqual(result, 0)
+        self.assertEqual(self.l._CustomList__values, [100, 1, 2, 100])
+
+    def test_count_value_is_not_in_the_list_returns_0(self):
+        self.l._CustomList__values = [100, 1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [100, 1, 2, 100])
+
+        result = self.l.count(3)
+
+        self.assertEqual(result, 0)
+        self.assertEqual(self.l._CustomList__values, [100, 1, 2, 100])
+
+    def test_count_value_returns_count(self):
+        self.l._CustomList__values = [100, 1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [100, 1, 2, 100])
+
+        result = self.l.count(100)
+
+        self.assertEqual(result, 2)
+        self.assertEqual(self.l._CustomList__values, [100, 1, 2, 100])
+
+    def test_reverse_empty_list(self):
+        self.assertEqual(self.l._CustomList__values, [])
+
+        result = self.l.reverse()
+
+        self.assertEqual(self.l._CustomList__values, [])
+        self.assertIsNot(self.l._CustomList__values, result)
 
 
 
+    def test_reverse_returns_new_list_with_reversed_value_order(self):
+        self.l._CustomList__values = [1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+
+        result = self.l.reverse()
+
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+        self.assertEqual(result, [100, 2, 1])
+        self.assertIsNot(result, self.l._CustomList__values)
+
+    def test_copy_empty_list(self):
+        self.assertEqual(self.l._CustomList__values, [])
+
+        result = self.l.copy()
+
+        self.assertEqual(self.l._CustomList__values, [])
+        self.assertIsNot(self.l._CustomList__values, result)
+
+    def test_copy_returns_same_values_new_list(self):
+        self.l._CustomList__values = [1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+
+        result = self.l.copy()
+
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+        self.assertEqual(result, [1, 2, 100])
+        self.assertIsNot(result, self.l._CustomList__values)
+
+    def test_size_empty_list_returns_0(self):
+        self.assertEqual(self.l._CustomList__values, [])
+        self.assertEqual(len(self.l._CustomList__values), 0)
+
+        result = self.l.size()
+
+        self.assertEqual(self.l._CustomList__values, [])
+        self.assertEqual(result, 0)
+
+    def test_size_returns_lentgh_of_the_list(self):
+        self.l._CustomList__values = [1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+        self.assertEqual(len(self.l._CustomList__values), 3)
 
 
+        result = self.l.size()
+
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+        self.assertEqual(result, 3)
+
+    def test_add_first_empty_list_ends_up_with_one_element(self):
+        self.assertEqual(self.l._CustomList__values, [])
+        self.assertEqual(len(self.l._CustomList__values), 0)
+
+        result = self.l.add_first(5)
+
+        self.assertIsNone(result)
+
+        self.assertEqual(self.l._CustomList__values, [5])
+        self.assertEqual(len(self.l._CustomList__values), 1)
+
+    def test_add_first_elements_in_list_ends_up_with_the_element_at_index_0(self):
+        self.l._CustomList__values = [1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+        self.assertEqual(len(self.l._CustomList__values), 3)
+
+        result = self.l.add_first(100)
+
+        self.assertEqual(self.l._CustomList__values, [100, 1, 2, 100])
+        self.assertEqual(len(self.l._CustomList__values), 4)
+
+        self.assertIsNone(result)
+
+    def test_dictionize_empty_list_empty_dict(self):
+        self.assertEqual(self.l._CustomList__values, [])
+
+        result = self.l.dictionize()
+
+        self.assertDictEqual(result, {})
+    def test_dictionize_odd_count_appends_space_as_value(self):
+        self.l._CustomList__values = [1, 2, 100]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+        self.assertEqual(len(self.l._CustomList__values), 3)
+
+        result = self.l.dictionize()
+
+        self.assertDictEqual(result, {1: 2, 100: ' '})
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100])
+        self.assertEqual(len(self.l._CustomList__values), 3)
+
+    def test_dictionize_even_count(self):
+        self.l._CustomList__values = [1, 2, 100, 5]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+        self.assertEqual(len(self.l._CustomList__values), 4)
+
+        result = self.l.dictionize()
+
+        self.assertDictEqual(result, {1: 2, 100: 5})
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+        self.assertEqual(len(self.l._CustomList__values), 4)
+
+    def test_move_empty_list(self):
+        self.assertEqual(self.l._CustomList__values, [])
+
+        result = self.l.move(2)
+
+        self.assertEqual(self.l._CustomList__values, [])
+        self.assertIs(result, self.l._CustomList__values)
+
+    def test_move(self):
+        self.l._CustomList__values = [1, 2, 100, 5]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+
+        result = self.l.move(2)
+
+        self.assertEqual(self.l._CustomList__values, [100, 5, 1, 2])
+        self.assertIs(result, self.l._CustomList__values)
+
+    def test_move_0_does_not_change_list(self):
+        self.l._CustomList__values = [1, 2, 100, 5]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+
+        result = self.l.move(0)
+
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+        self.assertIs(result, self.l._CustomList__values)
+
+    def test_move_with_length_of_the_list_does_not_change_list(self):
+        self.l._CustomList__values = [1, 2, 100, 5]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+
+        result = self.l.move(len(self.l._CustomList__values))
+
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+        self.assertIs(result, self.l._CustomList__values)
+
+    def test_move_with_length_plus_one_of_the_list_does_not_change_list(self):
+        self.l._CustomList__values = [1, 2, 100, 5]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+
+        result = self.l.move(len(self.l._CustomList__values)+1)
+
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+        self.assertIs(result, self.l._CustomList__values)
+
+    def test_move_invalid_int_or_negative_raises(self):
+        self.assertEqual(self.l._CustomList__values, [])
+
+        invalid_args = [2.3, "123", (1,3,3)]
+
+        for arg in invalid_args:
+            with self.assertRaises(ValueError) as ex:
+                self.l.move(arg)
+            self.assertEqual(str(ex.exception.args[0]), "Value is not a valid int")
+
+        with self.assertRaises(ValueError) as ex:
+            self.l.move(-1)
+        self.assertEqual(str(ex.exception.args[0]), "Value is not a valid int")
+
+    def test_sum_empty_list_returns_0(self):
+        self.assertEqual(self.l._CustomList__values, [])
+
+        result = self.l.sum()
+
+        self.assertEqual(result, 0)
+        self.assertEqual(self.l._CustomList__values, [])
+
+    def test_sum_only_numeric(self):
+        self.l._CustomList__values = [1, 2, 100, 5]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+
+        result = self.l.sum()
+
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5])
+        self.assertIs(result, 108)
+
+    def test_sum_non_numeric_returns_lens_amount(self):
+        self.l._CustomList__values = [1, 2, 100, 5, "asd", (1, 2), [1, 2, 3], {"1": 3}]
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5, "asd", (1, 2), [1, 2, 3], {"1": 3}])
+
+        result = self.l.sum()
+
+        self.assertEqual(self.l._CustomList__values, [1, 2, 100, 5, "asd", (1, 2), [1, 2, 3], {"1": 3}])
+        self.assertIs(result, 117)
+
+    def test_overbound_empty_list(self):
+        self.assertEqual(self.l._CustomList__values, [])
+
+        result = self.l.overbound()
+
+        self.assertIsNone(result)
+        self.assertEqual(self.l._CustomList__values, [])
 
 
+    def test_overbound_only_numeric(self):
+        self.l._CustomList__values = [100, 2, 100, 5]
+        self.assertEqual(self.l._CustomList__values, [100, 2, 100, 5])
 
+        result = self.l.overbound()
 
+        self.assertEqual(self.l._CustomList__values, [100, 2, 100, 5])
+        self.assertEqual(result, 0)
 
+    def test_overbound_numeric_and_iterables(self):
+        self.l._CustomList__values = [1, 2, "asd", (1, 2), [1, 2, 3], {"1": 3}]
+        self.assertEqual(self.l._CustomList__values,  [1, 2, "asd", (1, 2), [1, 2, 3], {"1": 3}])
 
+        result = self.l.overbound()
 
+        self.assertEqual(self.l._CustomList__values,  [1, 2, "asd", (1, 2), [1, 2, 3], {"1": 3}])
+        self.assertEqual(result, 2)
 
+    def test_underbound_empty_list(self):
+        self.assertEqual(self.l._CustomList__values, [])
 
+        result = self.l.underbound()
 
+        self.assertIsNone(result)
+        self.assertEqual(self.l._CustomList__values, [])
+
+    def test_underbound_only_numeric(self):
+        self.l._CustomList__values = [2, 100, 2, 5]
+        self.assertEqual(self.l._CustomList__values, [2, 100, 2, 5])
+
+        result = self.l.underbound()
+
+        self.assertEqual(self.l._CustomList__values, [2, 100, 2, 5])
+        self.assertEqual(result, 0)
+
+    def test_underbound_numeric_and_iterables(self):
+        self.l._CustomList__values = [5, 6, "asd", (1, 2), [1, 2, 3], {"1": 3}]
+        self.assertEqual(self.l._CustomList__values,  [5, 6, "asd", (1, 2), [1, 2, 3], {"1": 3}])
+
+        result = self.l.underbound()
+
+        self.assertEqual(self.l._CustomList__values,  [5, 6, "asd", (1, 2), [1, 2, 3], {"1": 3}])
+        self.assertEqual(result, 5)
 
 
 if __name__ == "__main__":

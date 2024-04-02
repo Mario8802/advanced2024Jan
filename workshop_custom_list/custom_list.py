@@ -46,3 +46,90 @@ class CustomList:
 
     def clear(self):
         self.__values.clear()
+
+    def index(self, value):
+        if value not in self.__values:
+            raise ValueError("Value is not in the list")
+        return self.__values.index(value)
+
+    def count(self, value):
+        return self.__values.count(value)
+
+    def reverse(self):
+        return self.__values[::-1]
+
+    def copy(self):
+        return self.__values[:]
+
+    def size(self):
+        return len(self.__values)
+
+    def add_first(self, value):
+        self.__values.insert(0, value)
+
+    def dictionize(self):
+        data = {}
+        for index in range(0, len(self.__values), 2):
+            key = self.__values[index]
+
+            try:
+                value = self.__values[index+1]
+            except IndexError:
+                value = " "
+
+            data[key] = value
+        return data
+
+    def move(self, n):
+
+        if not isinstance(n, int) or n < 0:
+            raise ValueError("Value is not a valid int")
+
+        self.__values = self.__values[n:] + self.__values[:n]
+        return self.__values
+
+    def sum(self):
+        total = 0
+
+        for el in self.__values:
+            if isinstance(el, Iterable):
+                total += len(el)
+            else:
+                total += el
+
+        return total
+
+
+    def overbound(self):
+        max_value = float('-inf')
+        max_value_index = None
+
+        for index in range(0, len(self.__values)):
+            current_element = self.__values[index]
+
+            if isinstance(current_element, Iterable):
+                current_element = len(current_element)
+
+            if max_value < current_element:
+                max_value = current_element
+                max_value_index = index
+
+        return max_value_index
+
+    def underbound(self):
+        min_value = float('inf')
+        min_value_index = None
+
+        for index in range(0, len(self.__values)):
+            current_element = self.__values[index]
+
+            if isinstance(current_element, Iterable):
+                current_element = len(current_element)
+
+            if min_value > current_element:
+                min_value = current_element
+                min_value_index = index
+
+        return min_value_index
+
+
